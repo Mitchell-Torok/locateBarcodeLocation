@@ -26,11 +26,19 @@ public:
 private:
   void topic_callback(const zbar_ros_interfaces::msg::Symbol::SharedPtr msg) const
   {
-    RCLCPP_INFO(this->get_logger(), "I heard: '%f'", msg);
-    RCLCPP_INFO(this->get_logger(), "I heard: '%f'", msg);
-    RCLCPP_INFO(this->get_logger(), "I heard: '%f'", msg);
-
-
+    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].x);
+    RCLCPP_INFO(this->get_logger(), "Data: '%s'", msg->data);
+    
+    
+    //top left point:
+    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].x);
+    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].y);
+    
+    //top right point?:
+    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[1].x);
+    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[1].y);
+    
+    
   }
   rclcpp::Subscription<zbar_ros_interfaces::msg::Symbol>::SharedPtr subscription_;
   rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr publisher_;
