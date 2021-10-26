@@ -8,7 +8,14 @@
 #include "zbar_ros_interfaces/msg/symbol.hpp"
 #include "cv_bridge/cv_bridge.h"
 
+#include <string>
+
 using std::placeholders::_1;
+using namespace std;
+
+int x = 0;
+
+std::string markers[10] = {"apple","2","3","","5","","7","","9",""};
 
 class MinimalSubscriber : public rclcpp::Node
 {
@@ -26,17 +33,29 @@ public:
 private:
   void topic_callback(const zbar_ros_interfaces::msg::Symbol::SharedPtr msg) const
   {
-    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].x);
-    RCLCPP_INFO(this->get_logger(), "Data: '%s'", msg->data);
+    //RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].x);
+    RCLCPP_INFO(this->get_logger(), "Data: '%s'", msg->data.c_str());
+    x ++ ;
+    RCLCPP_INFO(this->get_logger(), "X: '%d'", x);
+    
+    
+    markers[2] = "lets hope this gets replaced";
+    for (int i = 0; i < 10; i ++ ) {
+    	RCLCPP_INFO(this->get_logger(), "i: '%d' string: '%s'", i,markers[i].c_str());
+    }
+    
+    if (msg->data.compare(markers[0]) == 0) {
+    	RCLCPP_INFO(this->get_logger(), "It worky goods");
+    }
     
     
     //top left point:
-    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].x);
-    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].y);
+    //RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].x);
+    //RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[0].y);
     
     //top right point?:
-    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[1].x);
-    RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[1].y);
+    //RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[1].x);
+    //RCLCPP_INFO(this->get_logger(), "Points: '%f'", msg->points[1].y);
     
     
   }
