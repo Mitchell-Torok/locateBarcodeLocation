@@ -35,22 +35,25 @@ public:
     
     xpos = 0;
     publishPoint = 0;
+    id = "";
     }
 
 private:
   int xpos;
   int publishPoint;
-  
+  std::string id;
   void callbackScan(const sensor_msgs::msg::LaserScan::SharedPtr scan) {
 
   	if (publishPoint == 1) {
   		RCLCPP_INFO(this->get_logger(), "min data: '%d' ", xpos);
   		RCLCPP_INFO(this->get_logger(), "laser data: '%f' ", scan->ranges[0]);
+  		RCLCPP_INFO(this->get_logger(), "laser data: '%s' ", id.c_str());
   		
   		
   		//SORT HERE
   	    	geometry_msgs::msg::PointStamped pointStamped;
-    		pointStamped.header.frame_id = "base_link";
+    		pointStamped.header.frame_id = id.c_str();
+    		//pointStamped.header.id = ;
     		
 	  	pointStamped.point.x = 0.0;
 	    	pointStamped.point.y = 0.0;
@@ -79,6 +82,7 @@ private:
     	//If reached end of list add marker then find and broadcast point
     	if (markers[i].compare("") == 0) {
     		markers[i] = msg->data.c_str();
+    		id = msg->data.c_str();
     		publishPoint = 1;
     		break;
     	}
