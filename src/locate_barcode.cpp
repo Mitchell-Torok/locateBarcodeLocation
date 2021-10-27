@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include<cmath>
+
 using std::placeholders::_1;
 using namespace std;
 
@@ -48,8 +50,18 @@ private:
   		RCLCPP_INFO(this->get_logger(), "min data: '%d' ", xpos);
   		RCLCPP_INFO(this->get_logger(), "laser data: '%f' ", scan->ranges[0]);
   		RCLCPP_INFO(this->get_logger(), "laser data: '%s' ", id.c_str());
-  		
-  		
+				
+		for (int i = 0; i <= 360; i++) 
+	          cout << i << ": " << scan->ranges[i] << " \n ";
+		
+		 // xpos to range_idx curve fitting result
+  		int range_idx = round(-0.07636 * xpos + 24.98);
+	        if (range_idx < 0) range_idx += 360;
+  		RCLCPP_INFO(this->get_logger(), "laser angle: '%d' ", range_idx);
+        	float distance = scan->ranges[range_idx];
+  		RCLCPP_INFO(this->get_logger(), "laser distance: '%f' ", distance);
+
+
   		//SORT HERE
   	    	geometry_msgs::msg::PointStamped pointStamped;
     		pointStamped.header.frame_id = id.c_str();
