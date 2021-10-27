@@ -66,7 +66,7 @@ private:
               float radian_angle = PI/180 * range_idx; //range_idx is degree
               
               geometry_msgs::msg::PointStamped pointStamped;
-              pointStamped.header.frame_id = "base_link";
+              pointStamped.header.frame_id = "base_scan";
               
               pointStamped.point.x = distance * cos(radian_angle);
               pointStamped.point.y = distance * sin(radian_angle);
