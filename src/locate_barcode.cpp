@@ -56,7 +56,7 @@ private:
           for (int i = 0; i <= 360; i++) cout << i << ": " << scan->ranges[i] << " \n ";
           
            // xpos to range_idx curve fitting result
-          int range_idx = round(-0.07636 * xpos + 24.98);
+          int range_idx = round(-0.093942 * xpos + 29.32);
           if (range_idx < 0) range_idx += 360;
           RCLCPP_INFO(this->get_logger(), "laser angle: '%d' ", range_idx);
           float distance = scan->ranges[range_idx];
