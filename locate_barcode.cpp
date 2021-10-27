@@ -10,10 +10,8 @@
 #include <sensor_msgs/msg/laser_scan.hpp>
 
 #include <string>
-#include<cmath>
 
-#define PI 3.14159265
-#define THRESHOLD 1.8
+#include<cmath>
 
 using std::placeholders::_1;
 using namespace std;
@@ -39,48 +37,47 @@ public:
     
     xpos = 0;
     publishPoint = 0;
-    id = "";
     }
 
 private:
   int xpos;
   int publishPoint;
-  std::string id;
+  
   void callbackScan(const sensor_msgs::msg::LaserScan::SharedPtr scan) {
 
       if (publishPoint == 1) {
           RCLCPP_INFO(this->get_logger(), "min data: '%d' ", xpos);
           RCLCPP_INFO(this->get_logger(), "laser data: '%f' ", scan->ranges[0]);
-          RCLCPP_INFO(this->get_logger(), "laser data: '%s' ", id.c_str());
-          // command this line out after curve fitting				
-          for (int i = 0; i <= 360; i++) cout << i << ": " << scan->ranges[i] << " \n ";
+          // command this line out after curve fitting 
+          for (int i = 0; i <= 360; i++) cout << i << ": " << scan->ranges[i] << " \n";
           
-           // xpos to range_idx curve fitting result
+          // xpos to range_idx curve fitting result
           int range_idx = round(-0.07636 * xpos + 24.98);
           if (range_idx < 0) range_idx += 360;
           RCLCPP_INFO(this->get_logger(), "laser angle: '%d' ", range_idx);
           float distance = scan->ranges[range_idx];
           RCLCPP_INFO(this->get_logger(), "laser distance: '%f' ", distance);
           
+
+          const float THRESHOLD = 1.8
+          cout << "test1" << endl;
           if (distance<THRESHOLD){  
-              float radian_angle = PI/180 * range_idx; //range_idx is degree
-              
+              cout << "test2" << endl;
+              float radian_angle = 3.14159/180 * range_idx //range_idx is degree
               geometry_msgs::msg::PointStamped pointStamped;
               pointStamped.header.frame_id = "base_link";
               
               pointStamped.point.x = distance * cos(radian_angle);
-              pointStamped.point.y = distance * sin(radian_angle);
-              pointStamped.point.z = 0.5;
+              pointStamped.point.x = distance * sin(radian_angle);
+              pointStamped.point.z = 0.0;
               
               publishPoint = 0;
               publisher_->publish(pointStamped);
-             
               RCLCPP_INFO(this->get_logger(), "point published: '%f', '%f', '%f' ", pointStamped.point.x, pointStamped.point.y, pointStamped.point.z);
           } else{
-              RCLCPP_INFO(this->get_logger(), "still too far away. dropped");
+               RCLCPP_INFO(this->get_logger(), "still too far away. dropped");
           }
       }
-
   }
   
   void topic_callback(const zbar_ros_interfaces::msg::Symbol::SharedPtr msg)  {
@@ -101,7 +98,6 @@ private:
     	//If reached end of list add marker then find and broadcast point
     	if (markers[i].compare("") == 0) {
     		markers[i] = msg->data.c_str();
-    		id = msg->data.c_str();
     		publishPoint = 1;
     		break;
     	}
