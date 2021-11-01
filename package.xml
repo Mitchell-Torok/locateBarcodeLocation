@@ -18,6 +18,7 @@
   <depend>zbar</depend>
   <depend>cv_bridge</depend>
   <depend>sensor_msgs</depend>
+  <depend>qr_custom_message</depend>
   
   <export>
     <build_type>ament_cmake</build_type>

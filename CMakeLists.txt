@@ -18,10 +18,11 @@ find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(zbar_ros_interfaces REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(qr_custom_message REQUIRED)
 
 
 add_executable(locateBarcodeLocation src/locate_barcode.cpp)
-ament_target_dependencies(locateBarcodeLocation rclcpp std_msgs geometry_msgs sensor_msgs zbar_ros_interfaces cv_bridge)
+ament_target_dependencies(locateBarcodeLocation rclcpp std_msgs geometry_msgs sensor_msgs zbar_ros_interfaces cv_bridge qr_custom_message)
 
 install(TARGETS
   locateBarcodeLocation

@@ -8,6 +8,7 @@
 #include "zbar_ros_interfaces/msg/symbol.hpp"
 #include "cv_bridge/cv_bridge.h"
 #include <sensor_msgs/msg/laser_scan.hpp>
+#include "qr_custom_message/msg/qr_point_stamped.hpp"
 
 #include <string>
 #include<cmath>
@@ -35,7 +36,7 @@ public:
     scanSub_ = this->create_subscription<sensor_msgs::msg::LaserScan>("scan", 1, std::bind(&MinimalSubscriber::callbackScan, this, std::placeholders::_1));
     
     
-    publisher_ = this->create_publisher<geometry_msgs::msg::PointStamped>("topic", 10);
+    publisher_ = this->create_publisher<qr_custom_message::msg::QrPointStamped>("topic", 10);
     
     xpos = 0;
     publishPoint = 0;
@@ -65,17 +66,19 @@ private:
           if (distance<THRESHOLD){  
               float radian_angle = PI/180 * range_idx; //range_idx is degree
               
-              geometry_msgs::msg::PointStamped pointStamped;
-              pointStamped.header.frame_id = "base_scan";
+
+              qr_custom_message::msg::QrPointStamped qrPointStamped;
+              qrPointStamped.header.frame_id = "base_scan";
+              qrPointStamped.data = id;
               
-              pointStamped.point.x = distance * cos(radian_angle);
-              pointStamped.point.y = distance * sin(radian_angle);
-              pointStamped.point.z = 0.5;
+              qrPointStamped.point.x = distance * cos(radian_angle);
+              qrPointStamped.point.y = distance * sin(radian_angle);
+              qrPointStamped.point.z = 0.1;
               
               publishPoint = 0;
-              publisher_->publish(pointStamped);
+              publisher_->publish(qrPointStamped);
              
-              RCLCPP_INFO(this->get_logger(), "point published: '%f', '%f', '%f' ", pointStamped.point.x, pointStamped.point.y, pointStamped.point.z);
+              RCLCPP_INFO(this->get_logger(), "point published: '%f', '%f', '%f' ", qrPointStamped.point.x, qrPointStamped.point.y, qrPointStamped.point.z);
           } else{
               RCLCPP_INFO(this->get_logger(), "still too far away. dropped");
           }
@@ -110,7 +113,7 @@ private:
   }
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scanSub_;
   rclcpp::Subscription<zbar_ros_interfaces::msg::Symbol>::SharedPtr subscription_;
-  rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr publisher_;
+  rclcpp::Publisher<qr_custom_message::msg::QrPointStamped>::SharedPtr publisher_;
 
 };
 
