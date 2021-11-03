@@ -14,7 +14,7 @@
 #include<cmath>
 
 #define PI 3.14159265
-#define THRESHOLD 1.8
+#define THRESHOLD 3
 
 using std::placeholders::_1;
 using namespace std;
